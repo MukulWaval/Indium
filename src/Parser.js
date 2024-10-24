@@ -152,6 +152,99 @@ class Parser {
   }
 
   /**
+   * IterationStatement
+   *  : WhileStatement
+   *  | DoWhileStatement
+   *  | ForStatement
+   *  ;
+   */
+  IterationStatement() {
+    switch (this._lookahead.type) {
+      case "while":
+        return this.WhileStatement();
+      case "do":
+        return this.DoWhileStatement();
+      case "for":
+        return this.ForStatement();
+    }
+  }
+
+  /**
+   * WhileStatement
+   *  : 'while' '(' Expression ')' Statement
+   *  ;
+   */
+  WhileStatement() {
+    this._eat("while");
+    this._eat("(");
+    const test = this.Expression();
+    this._eat(")");
+    const body = this.Statement();
+    return {
+      type: "WhileStatement",
+      test,
+      body,
+    };
+  }
+
+  /**
+   * DoWhileStatement
+   *  : 'do' Statement 'while' '(' Expression ')' ';'
+   *  ;
+   */
+  DoWhileStatement() {
+    this._eat("do");
+    const body = this.Statement();
+    this._eat("while");
+    this._eat("(");
+    const test = this.Expression();
+    this._eat(")");
+    this._eat(";");
+    return {
+      type: "DoWhileStatement",
+      body,
+      test,
+    };
+  }
+
+  /**
+   * ForStatement
+   *  : 'for' '(' OptForStatement ';' OptExpression ';' OptExpression ')' Statement
+   *  ;
+   */
+  ForStatement() {
+    this._eat("for");
+    this._eat("(");
+    const init = this._lookahead.type !== ";" ? this.ForStatementInit() : null;
+    this._eat(";");
+    const test = this._lookahead.type !== ";" ? this.Expression() : null;
+    this._eat(";");
+    const update = this._lookahead.type !== ")" ? this.Expression() : null;
+    this._eat(")");
+    const body = this.Statement();
+    return {
+      type: "ForStatement",
+      init,
+      test,
+      update,
+      body,
+    };
+  }
+
+  /**
+   * ForStatementInit
+   *  : VariableStatementInit
+   *  | Expression
+   *  ;
+   */
+  ForStatementInit() {
+    if (this._lookahead.type === "let") {
+      return this.VariableStatementInit();
+    }
+    return this.Expression();
+  }
+
+  /**
    * Expects a token of a given type.
    */
   _eat(tokenType) {
