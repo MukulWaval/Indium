@@ -44,6 +44,57 @@ class Parser {
   }
 
   /**
+   * StatementList
+   *  : Statement
+   *  | StatementList
+   *  ;
+   */
+  StatementList(stopLookahead = null) {
+    const statementList = [this.Statement()];
+
+    while (this._lookahead != null && this._lookahead.type !== stopLookahead) {
+      statementList.push(this.Statement());
+    }
+
+    return statementList;
+  }
+
+  /**
+   * Statement
+   *  : ExpressionStatement
+   *  | BlockStatement
+   *  | EmptyStatement
+   *  | VariableStatement
+   *  | IfStatement
+   *  | IterationStatement
+   *  | FunctionDeclaration
+   *  | ReturnStatement
+   *  ;
+   */
+  Statement() {
+    switch (this._lookahead.type) {
+      case ";":
+        return this.EmptyStatement();
+      case "if":
+        return this.IfStatement();
+      case "{":
+        return this.BlockStatement();
+      case "let":
+        return this.VariableStatement();
+      case "def":
+        return this.FunctionDeclaration();
+      case "return":
+        return this.ReturnStatement();
+      case "while":
+      case "do":
+      case "for":
+        return this.IterationStatement();
+      default:
+        return this.ExpressionStatement();
+    }
+  }
+
+  /**
    * Expects a token of a given type.
    */
   _eat(tokenType) {
