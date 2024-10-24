@@ -32,6 +32,10 @@ const Spec = [
 
   // EQUALITY OPERATORS------------------------------------------------
   [/^[=!]=/, "EqualityOperator"],
+
+  // ASSIGNMENT OPERATORS----------------------------------------------
+  [/^=/, "SimpleAssignment"],
+  [/^[\*\/\+\-]=/, "ComplexAssignment"],
 ];
 
 /**
