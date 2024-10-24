@@ -43,6 +43,11 @@ const Spec = [
 
   // RELATIONAL OPERATORS----------------------------------------------
   [/^[><]=?/, "RelationalOperator"],
+
+  // LOGICAL OPERATORS------------------------------------------------
+  [/^&&/, "LogicalAnd"],
+  [/^\|\|/, "LogicalOr"],
+  [/^!/, "LogicalNot"],
 ];
 
 /**
