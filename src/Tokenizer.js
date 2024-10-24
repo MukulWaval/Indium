@@ -36,6 +36,10 @@ const Spec = [
   // ASSIGNMENT OPERATORS----------------------------------------------
   [/^=/, "SimpleAssignment"],
   [/^[\*\/\+\-]=/, "ComplexAssignment"],
+
+  // MATH OPERATORS----------------------------------------------------
+  [/^[+\-]/, "AdditiveOperator"],
+  [/^[*\/]/, "MultiplicativeOperator"],
 ];
 
 /**
