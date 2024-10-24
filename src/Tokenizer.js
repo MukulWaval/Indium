@@ -40,6 +40,9 @@ const Spec = [
   // MATH OPERATORS----------------------------------------------------
   [/^[+\-]/, "AdditiveOperator"],
   [/^[*\/]/, "MultiplicativeOperator"],
+
+  // RELATIONAL OPERATORS----------------------------------------------
+  [/^[><]=?/, "RelationalOperator"],
 ];
 
 /**
