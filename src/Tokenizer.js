@@ -29,6 +29,9 @@ const Spec = [
   [/^\bfor\b/, "for"],
   [/^\bdef\b/, "def"],
   [/^\breturn\b/, "return"],
+
+  // EQUALITY OPERATORS------------------------------------------------
+  [/^[=!]=/, "EqualityOperator"],
 ];
 
 /**
