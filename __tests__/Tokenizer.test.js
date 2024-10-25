@@ -255,7 +255,7 @@ describe("Tokenizer", () => {
           expect(tokenizer.getNextToken()).toBeNull();
         });
 
-        test("should tokenize math operato '/'", () => {
+        test("should tokenize math operator '/'", () => {
           tokenizer.init("/");
           expect(tokenizer.getNextToken()).toEqual({
             type: "MultiplicativeOperator",
