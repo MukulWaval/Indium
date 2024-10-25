@@ -139,3 +139,7 @@ class Tokenizer {
     return matched[0];
   }
 }
+
+module.exports = {
+  Tokenizer,
+};
