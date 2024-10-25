@@ -28,142 +28,280 @@ describe("Tokenizer", () => {
       tokenizer = new Tokenizer();
     });
 
-    test("should handle whitespace and comments (skipped tokens)", () => {
-      tokenizer.init("   // comment \n /* block comment */");
-      expect(tokenizer.getNextToken()).toBeNull();
+    describe("Comments", () => {
+      test("should handle whitespace and comments (skipped tokens)", () => {
+        tokenizer.init("   // comment \n /* block comment */");
+        expect(tokenizer.getNextToken()).toBeNull();
+      });
     });
 
-    test("should tokenize symbols and delimiters", () => {
-      tokenizer.init("();{},");
-      expect(tokenizer.getNextToken()).toEqual({ type: "(", value: "(" });
-      expect(tokenizer.getNextToken()).toEqual({ type: ")", value: ")" });
-      expect(tokenizer.getNextToken()).toEqual({ type: ";", value: ";" });
-      expect(tokenizer.getNextToken()).toEqual({ type: "{", value: "{" });
-      expect(tokenizer.getNextToken()).toEqual({ type: "}", value: "}" });
-      expect(tokenizer.getNextToken()).toEqual({ type: ",", value: "," });
-      expect(tokenizer.getNextToken()).toBeNull();
+    describe("Symbols and Delimeters", () => {
+      test("should tokenize symbol '('", () => {
+        tokenizer.init("(");
+        expect(tokenizer.getNextToken()).toEqual({ type: "(", value: "(" });
+        expect(tokenizer.getNextToken()).toBeNull();
+      });
+
+      test("should tokenize symbol ')'", () => {
+        tokenizer.init(")");
+        expect(tokenizer.getNextToken()).toEqual({ type: ")", value: ")" });
+        expect(tokenizer.getNextToken()).toBeNull();
+      });
+
+      test("should tokenize symbol '{'", () => {
+        tokenizer.init("{");
+        expect(tokenizer.getNextToken()).toEqual({ type: "{", value: "{" });
+        expect(tokenizer.getNextToken()).toBeNull();
+      });
+
+      test("should tokenize symbol '}'", () => {
+        tokenizer.init("}");
+        expect(tokenizer.getNextToken()).toEqual({ type: "}", value: "}" });
+        expect(tokenizer.getNextToken()).toBeNull();
+      });
+
+      test("should tokenize delimeter ';'", () => {
+        tokenizer.init(";");
+        expect(tokenizer.getNextToken()).toEqual({ type: ";", value: ";" });
+        expect(tokenizer.getNextToken()).toBeNull();
+      });
+
+      test("should tokenize delimeter','", () => {
+        tokenizer.init(",");
+        expect(tokenizer.getNextToken()).toEqual({ type: ",", value: "," });
+        expect(tokenizer.getNextToken()).toBeNull();
+      });
     });
 
-    test("should tokenize keywords", () => {
-      tokenizer.init("let if else true false null while do for def return");
-      expect(tokenizer.getNextToken()).toEqual({ type: "let", value: "let" });
-      expect(tokenizer.getNextToken()).toEqual({ type: "if", value: "if" });
-      expect(tokenizer.getNextToken()).toEqual({ type: "else", value: "else" });
-      expect(tokenizer.getNextToken()).toEqual({ type: "true", value: "true" });
-      expect(tokenizer.getNextToken()).toEqual({
-        type: "false",
-        value: "false",
+    describe("Keywords", () => {
+      test("should tokenize keyword 'let'", () => {
+        tokenizer.init("let");
+        expect(tokenizer.getNextToken()).toEqual({ type: "let", value: "let" });
+        expect(tokenizer.getNextToken()).toBeNull();
       });
-      expect(tokenizer.getNextToken()).toEqual({ type: "null", value: "null" });
-      expect(tokenizer.getNextToken()).toEqual({
-        type: "while",
-        value: "while",
+
+      test("should tokenize keyword 'if'", () => {
+        tokenizer.init("if");
+        expect(tokenizer.getNextToken()).toEqual({ type: "if", value: "if" });
+        expect(tokenizer.getNextToken()).toBeNull();
       });
-      expect(tokenizer.getNextToken()).toEqual({ type: "do", value: "do" });
-      expect(tokenizer.getNextToken()).toEqual({ type: "for", value: "for" });
-      expect(tokenizer.getNextToken()).toEqual({ type: "def", value: "def" });
-      expect(tokenizer.getNextToken()).toEqual({
-        type: "return",
-        value: "return",
+
+      test("should tokenize keyword 'else'", () => {
+        tokenizer.init("else");
+        expect(tokenizer.getNextToken()).toEqual({
+          type: "else",
+          value: "else",
+        });
+        expect(tokenizer.getNextToken()).toBeNull();
       });
-      expect(tokenizer.getNextToken()).toBeNull();
+
+      test("should tokenize keyword 'true'", () => {
+        tokenizer.init("true");
+        expect(tokenizer.getNextToken()).toEqual({
+          type: "true",
+          value: "true",
+        });
+        expect(tokenizer.getNextToken()).toBeNull();
+      });
+
+      test("should tokenize keyword 'false'", () => {
+        tokenizer.init("false");
+        expect(tokenizer.getNextToken()).toEqual({
+          type: "false",
+          value: "false",
+        });
+        expect(tokenizer.getNextToken()).toBeNull();
+      });
+
+      test("should tokenize keyword 'null'", () => {
+        tokenizer.init("null");
+        expect(tokenizer.getNextToken()).toEqual({
+          type: "null",
+          value: "null",
+        });
+        expect(tokenizer.getNextToken()).toBeNull();
+      });
+
+      test("should tokenize keyword 'while'", () => {
+        tokenizer.init("while");
+        expect(tokenizer.getNextToken()).toEqual({
+          type: "while",
+          value: "while",
+        });
+        expect(tokenizer.getNextToken()).toBeNull();
+      });
+
+      test("should tokenize keyword 'do'", () => {
+        tokenizer.init("do");
+        expect(tokenizer.getNextToken()).toEqual({ type: "do", value: "do" });
+        expect(tokenizer.getNextToken()).toBeNull();
+      });
+
+      test("should tokenize keyword 'for'", () => {
+        tokenizer.init("for");
+        expect(tokenizer.getNextToken()).toEqual({ type: "for", value: "for" });
+        expect(tokenizer.getNextToken()).toBeNull();
+      });
+
+      test("should tokenize keyword 'def'", () => {
+        tokenizer.init("def");
+        expect(tokenizer.getNextToken()).toEqual({ type: "def", value: "def" });
+        expect(tokenizer.getNextToken()).toBeNull();
+      });
+
+      test("should tokenize keyword 'return'", () => {
+        tokenizer.init("return");
+        expect(tokenizer.getNextToken()).toEqual({
+          type: "return",
+          value: "return",
+        });
+        expect(tokenizer.getNextToken()).toBeNull();
+      });
     });
 
-    test("should tokenize equality operators", () => {
-      tokenizer.init("== !=");
-      expect(tokenizer.getNextToken()).toEqual({
-        type: "EqualityOperator",
-        value: "==",
-      });
-      expect(tokenizer.getNextToken()).toEqual({
-        type: "EqualityOperator",
-        value: "!=",
-      });
-      expect(tokenizer.getNextToken()).toBeNull();
-    });
+    describe("Operators", () => {
+      describe("Equality Operators", () => {
+        test("should tokenize equality operator '=='", () => {
+          tokenizer.init("==");
+          expect(tokenizer.getNextToken()).toEqual({
+            type: "EqualityOperator",
+            value: "==",
+          });
+          expect(tokenizer.getNextToken()).toBeNull();
+        });
 
-    test("should tokenize assignment operators", () => {
-      tokenizer.init("= += -= *= /=");
-      expect(tokenizer.getNextToken()).toEqual({
-        type: "SimpleAssignment",
-        value: "=",
+        test("should tokenize equality operator '!='", () => {
+          tokenizer.init("!=");
+          expect(tokenizer.getNextToken()).toEqual({
+            type: "EqualityOperator",
+            value: "!=",
+          });
+          expect(tokenizer.getNextToken()).toBeNull();
+        });
       });
-      expect(tokenizer.getNextToken()).toEqual({
-        type: "ComplexAssignment",
-        value: "+=",
-      });
-      expect(tokenizer.getNextToken()).toEqual({
-        type: "ComplexAssignment",
-        value: "-=",
-      });
-      expect(tokenizer.getNextToken()).toEqual({
-        type: "ComplexAssignment",
-        value: "*=",
-      });
-      expect(tokenizer.getNextToken()).toEqual({
-        type: "ComplexAssignment",
-        value: "/=",
-      });
-      expect(tokenizer.getNextToken()).toBeNull();
-    });
 
-    test("should tokenize math operators", () => {
-      tokenizer.init("+ - * /");
-      expect(tokenizer.getNextToken()).toEqual({
-        type: "AdditiveOperator",
-        value: "+",
-      });
-      expect(tokenizer.getNextToken()).toEqual({
-        type: "AdditiveOperator",
-        value: "-",
-      });
-      expect(tokenizer.getNextToken()).toEqual({
-        type: "MultiplicativeOperator",
-        value: "*",
-      });
-      expect(tokenizer.getNextToken()).toEqual({
-        type: "MultiplicativeOperator",
-        value: "/",
-      });
-      expect(tokenizer.getNextToken()).toBeNull();
-    });
+      describe("Assignment Operator", () => {
+        test("should tokenize assignment operator '='", () => {
+          tokenizer.init("=");
+          expect(tokenizer.getNextToken()).toEqual({
+            type: "SimpleAssignment",
+            value: "=",
+          });
+          expect(tokenizer.getNextToken()).toBeNull();
+        });
 
-    test("should tokenize relational operators", () => {
-      tokenizer.init("> < >= <=");
-      expect(tokenizer.getNextToken()).toEqual({
-        type: "RelationalOperator",
-        value: ">",
-      });
-      expect(tokenizer.getNextToken()).toEqual({
-        type: "RelationalOperator",
-        value: "<",
-      });
-      expect(tokenizer.getNextToken()).toEqual({
-        type: "RelationalOperator",
-        value: ">=",
-      });
-      expect(tokenizer.getNextToken()).toEqual({
-        type: "RelationalOperator",
-        value: "<=",
-      });
-      expect(tokenizer.getNextToken()).toBeNull();
-    });
+        test("should tokenize assignment operator '+='", () => {
+          tokenizer.init("+=");
+          expect(tokenizer.getNextToken()).toEqual({
+            type: "ComplexAssignment",
+            value: "+=",
+          });
+          expect(tokenizer.getNextToken()).toBeNull();
+        });
 
-    test("should tokenize logical operators", () => {
-      tokenizer.init("&& || !");
-      expect(tokenizer.getNextToken()).toEqual({
-        type: "LogicalAnd",
-        value: "&&",
+        test("should tokenize assignment operator '-='", () => {
+          tokenizer.init("-=");
+          expect(tokenizer.getNextToken()).toEqual({
+            type: "ComplexAssignment",
+            value: "-=",
+          });
+          expect(tokenizer.getNextToken()).toBeNull();
+        });
+
+        test("should tokenize assignment operator '*='", () => {
+          tokenizer.init("*=");
+          expect(tokenizer.getNextToken()).toEqual({
+            type: "ComplexAssignment",
+            value: "*=",
+          });
+          expect(tokenizer.getNextToken()).toBeNull();
+        });
+
+        test("should tokenize assignment operator '/='", () => {
+          tokenizer.init("/=");
+          expect(tokenizer.getNextToken()).toEqual({
+            type: "ComplexAssignment",
+            value: "/=",
+          });
+          expect(tokenizer.getNextToken()).toBeNull();
+        });
       });
-      expect(tokenizer.getNextToken()).toEqual({
-        type: "LogicalOr",
-        value: "||",
+
+      describe("Math Operators", () => {
+        test("should tokenize math operator '+'", () => {
+          tokenizer.init("+");
+          expect(tokenizer.getNextToken()).toEqual({
+            type: "AdditiveOperator",
+            value: "+",
+          });
+          expect(tokenizer.getNextToken()).toBeNull();
+        });
+
+        test("should tokenize math operator '-'", () => {
+          tokenizer.init("-");
+          expect(tokenizer.getNextToken()).toEqual({
+            type: "AdditiveOperator",
+            value: "-",
+          });
+          expect(tokenizer.getNextToken()).toBeNull();
+        });
+
+        test("should tokenize math operator '*'", () => {
+          tokenizer.init("*");
+          expect(tokenizer.getNextToken()).toEqual({
+            type: "MultiplicativeOperator",
+            value: "*",
+          });
+          expect(tokenizer.getNextToken()).toBeNull();
+        });
+
+        test("should tokenize math operato '/'", () => {
+          tokenizer.init("/");
+          expect(tokenizer.getNextToken()).toEqual({
+            type: "MultiplicativeOperator",
+            value: "/",
+          });
+          expect(tokenizer.getNextToken()).toBeNull();
+        });
       });
-      expect(tokenizer.getNextToken()).toEqual({
-        type: "LogicalNot",
-        value: "!",
+
+      test("should tokenize relational operators", () => {
+        tokenizer.init("> < >= <=");
+        expect(tokenizer.getNextToken()).toEqual({
+          type: "RelationalOperator",
+          value: ">",
+        });
+        expect(tokenizer.getNextToken()).toEqual({
+          type: "RelationalOperator",
+          value: "<",
+        });
+        expect(tokenizer.getNextToken()).toEqual({
+          type: "RelationalOperator",
+          value: ">=",
+        });
+        expect(tokenizer.getNextToken()).toEqual({
+          type: "RelationalOperator",
+          value: "<=",
+        });
+        expect(tokenizer.getNextToken()).toBeNull();
       });
-      expect(tokenizer.getNextToken()).toBeNull();
+
+      test("should tokenize logical operators", () => {
+        tokenizer.init("&& || !");
+        expect(tokenizer.getNextToken()).toEqual({
+          type: "LogicalAnd",
+          value: "&&",
+        });
+        expect(tokenizer.getNextToken()).toEqual({
+          type: "LogicalOr",
+          value: "||",
+        });
+        expect(tokenizer.getNextToken()).toEqual({
+          type: "LogicalNot",
+          value: "!",
+        });
+        expect(tokenizer.getNextToken()).toBeNull();
+      });
     });
 
     test("should tokenize numbers", () => {
