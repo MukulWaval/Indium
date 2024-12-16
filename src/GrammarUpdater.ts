@@ -4,38 +4,29 @@ import * as fs from "fs";
 export class GrammarUpdater {
   private _sourcePath: string;
   private _destPath: string;
-  private _secondPath: string;
 
   constructor(
-    sourcePath: string,
-    destPath: string,
-    secondPath: string = path.posix.join(
-      __dirname,
-      "..",
-      "grammar",
-      "grammar.md"
-    )
+    sourcePath: string = path.posix.join(__dirname, ".", "Parser.ts"),
+    destPath: string = path.posix.join(__dirname, "..", "grammar", "grammar.md")
   ) {
     this._sourcePath = sourcePath;
     this._destPath = destPath;
-    this._secondPath = secondPath;
   }
 
   public Update(): void {
-    const source: string | null = this._readFile(this._sourcePath);
-    const comments: string[] = this._extractComments(source || "");
-    const stripedComments: string[] = this._stripComments(comments);
-    const filteredComments: string[] = this._filterComments(stripedComments);
-    const grammar: { name: string; contains: string[] }[] =
-      this._parseGrammar(filteredComments);
-    const documentation: string = this._generateDocumentation(grammar);
-    const docSource: string | null = this._readFile(this._destPath);
-    const finalDocumentation: string = this._replaceOldDoc(
-      docSource || "",
-      documentation
-    );
-    this._writeToFile(this._destPath, finalDocumentation);
-    console.log("\nGrammar updated successfully.");
+    try {
+      const source: string | null = this._readFile(this._sourcePath);
+      const comments: string[] = this._extractComments(source || "");
+      const stripedComments: string[] = this._stripComments(comments);
+      const filteredComments: string[] = this._filterComments(stripedComments);
+      const grammar: { name: string; contains: string[] }[] =
+        this._parseGrammar(filteredComments);
+      const documentation: string = this._generateDocumentation(grammar);
+      this._writeToFile(this._destPath, "```ebnf\n" + documentation + "\n```");
+      console.log("Grammar updated successfully.");
+    } catch (error) {
+      console.error("Error updating grammar:", error);
+    }
   }
 
   private _readFile(path: string): string | null {
@@ -100,29 +91,8 @@ export class GrammarUpdater {
       }
       result += ";";
     });
-    this._writeToFile(this._secondPath, "```ebnf\n" + result + "\n```");
+    this._writeToFile(this._destPath, "```ebnf\n" + result + "\n```");
     return result;
-  }
-
-  private _replaceOldDoc(inputString: string, newContent: string): string {
-    const startMarker: string = "<!-- GrammarStart -->" + "\n```ebnf";
-    const endMarker: string = "```\n" + "<!-- GrammarEnd -->";
-    const startIndex: number = inputString.indexOf(startMarker);
-    if (startIndex === -1) {
-      throw new Error(`Start marker "${startMarker}" not found.`);
-    }
-    const endIndex: number = inputString.indexOf(endMarker, startIndex);
-    if (endIndex === -1) {
-      throw new Error(`End marker "${endMarker}" not found.`);
-    }
-    const beforeSection: string = inputString.substring(
-      0,
-      startIndex + startMarker.length
-    );
-    const afterSection: string = inputString.substring(endIndex);
-    const resultString: string =
-      beforeSection + "\n" + newContent + "\n" + afterSection;
-    return resultString;
   }
 
   private _writeToFile(path: string, content: string): void {
@@ -132,4 +102,9 @@ export class GrammarUpdater {
       console.error(error);
     }
   }
+}
+
+if (require.main === module) {
+  const grammarUpdater = new GrammarUpdater();
+  grammarUpdater.Update();
 }
