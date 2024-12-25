@@ -8,21 +8,86 @@ interface Token {
 
 const Spec: Token[] = [
   // WHITESPACE--------------------------------------------------------
+  /**
+   * Whitespace
+   *  : spaces
+   *  | tabs
+   *  | newlines
+   *  ;
+   */
   { regex: /^\s+/, tokenType: null },
 
   // COMMENTS----------------------------------------------------------
+  /**
+   * SingleLineComments
+   *  : '//' ~[\n]asterisks '\n'
+   *  ;
+   */
   { regex: /^\/\/.*$/, tokenType: null },
+  /**
+   * MultiLineComments
+   *  : '/asterisks' ~['asterisks']asterisks
+   *  | '/asterisks' ~['asterisks']asterisks 'asterisks' ~['/']asterisks
+   *  | '/asterisks' ~['asterisks']asterisks asterisks' asterisks '/asterisks' ~['asterisks']asterisks
+   *  | '/asterisks' ~['asterisks']asterisks 'asterisks' ~['/']asterisks asterisks' ~['asterisksasterisks 'asterisks' asterisks'/']
+   *  ;
+   */
   { regex: /^\/\*[\s\S]*?\*\//, tokenType: null },
 
   // SYMBOLS, DELIMITERS----------------------------------------------
+  /**
+   * Semicolon
+   *  : ';'
+   *  ;
+   */
   { regex: /^;/, tokenType: ";" },
+  /**
+   * OpenBrace
+   *  : '{'
+   *  ;
+   */
   { regex: /^{/, tokenType: "{" },
+  /**
+   * CloseBrace
+   *  : '}'
+   *  ;
+   */
   { regex: /^}/, tokenType: "}" },
+  /**
+   * OpenParen
+   *  : '('
+   *  ;
+   */
   { regex: /^\(/, tokenType: "(" },
+  /**
+   * CloseParen
+   *  : ')'
+   *  ;
+   */
   { regex: /^\)/, tokenType: ")" },
+  /**
+   * Comma
+   *  : ','
+   *  ;
+   */
   { regex: /^,/, tokenType: "," },
 
   // KEYWORDS----------------------------------------------------------
+  /**
+   * Keywords
+   *  : 'let'
+   *  | 'if'
+   *  | 'else'
+   *  | 'true'
+   *  | 'false'
+   *  | 'null'
+   *  | 'while'
+   *  | 'do'
+   *  | 'for'
+   *  | 'def'
+   *  | 'return'
+   *  ;
+   */
   { regex: /^\blet\b/, tokenType: "let" },
   { regex: /^\bif\b/, tokenType: "if" },
   { regex: /^\belse\b/, tokenType: "else" },
@@ -36,32 +101,102 @@ const Spec: Token[] = [
   { regex: /^\breturn\b/, tokenType: "return" },
 
   // EQUALITY OPERATORS------------------------------------------------
+  /**
+   * EqualityOperator
+   *  : '=='
+   *  | '!='
+   *  ;
+   */
   { regex: /^[=!]=/, tokenType: "EqualityOperator" },
 
   // ASSIGNMENT OPERATORS----------------------------------------------
+  /**
+   * SimpleAssignment
+   *  : '='
+   *  ;
+   */
   { regex: /^=/, tokenType: "SimpleAssignment" },
+  /**
+   * ComplexAssignment
+   *  : '+='
+   *  | '-='
+   *  | 'asterisks='
+   *  | '/='
+   *  ;
+   */
   { regex: /^[\*\/\+\-]=/, tokenType: "ComplexAssignment" },
 
   // MATH OPERATORS----------------------------------------------------
+  /**
+   * AdditiveOperator
+   *  : '+'
+   *  | '-'
+   *  ;
+   */
   { regex: /^[+\-]/, tokenType: "AdditiveOperator" },
+  /**
+   * MultiplicativeOperator
+   *  : 'asterisks'
+   *  | '/'
+   *  ;
+   */
   { regex: /^[*\/]/, tokenType: "MultiplicativeOperator" },
 
   // RELATIONAL OPERATORS----------------------------------------------
+  /**
+   * RelationalOperator
+   *  : '<'
+   *  | '>'
+   *  | '<='
+   *  | '>='
+   *  ;
+   */
   { regex: /^[><]=?/, tokenType: "RelationalOperator" },
 
   // LOGICAL OPERATORS------------------------------------------------
+  /**
+   * LogicalAnd
+   *  : '&&'
+   *  ;
+   */
   { regex: /^&&/, tokenType: "LogicalAnd" },
+  /**
+   * LogicalOr
+   *  : 'PipePipe'
+   *  ;
+   */
   { regex: /^\|\|/, tokenType: "LogicalOr" },
+  /**
+   * LogicalNot
+   *  : '!'
+   *  ;
+   */
   { regex: /^!/, tokenType: "LogicalNot" },
 
   // NUMBER------------------------------------------------------------
+  /**
+   * Number
+   *  : [0-9]+
+   *  ;
+   */
   { regex: /^\d+/, tokenType: "NUMBER" },
 
   // STRING------------------------------------------------------------
+  /**
+   * String
+   *  : '"' ~["]asterisks '"'
+   *  | "'" ~[']asterisks "'"
+   *  ;
+   */
   { regex: /^"[^"]*"/, tokenType: "STRING" },
   { regex: /^'[^']*'/, tokenType: "STRING" },
 
   // IDENTIFIERS-------------------------------------------------------
+  /**
+   * Identifier
+   *  : [a-zA-Z_][a-zA-Z0-9_]asterisks
+   *  ;
+   */
   { regex: /^\w+/, tokenType: "IDENTIFIER" },
 ];
 

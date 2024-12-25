@@ -1,9 +1,20 @@
 import path = require("path");
-import { GrammarUpdater } from "./GrammarUpdater";
+import { ParserDocumentationUpdater } from "./documentation-updaters/ParserDocumentationUpdater";
+import { TokenizerDocumentationUpdater } from "./documentation-updaters/TokenizerDocumentationUpdate";
 
-const updater = new GrammarUpdater(
+const parserDocumentationUpdaterupdater = new ParserDocumentationUpdater(
   path.posix.join(__dirname, "..", "src", "Parser.ts"),
-  path.posix.join(__dirname, "..", "grammar", "grammar.md")
+  path.posix.join(__dirname, "..", "documentation", "parser-documentation.md")
 );
+parserDocumentationUpdaterupdater.update();
 
-updater.Update();
+const tokenizerDocumentationUpdater = new TokenizerDocumentationUpdater(
+  path.posix.join(__dirname, "..", "src", "Tokenizer.ts"),
+  path.posix.join(
+    __dirname,
+    "..",
+    "documentation",
+    "tokenizer-documentation.md"
+  )
+);
+tokenizerDocumentationUpdater.update();

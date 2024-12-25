@@ -29,9 +29,10 @@ cd indium
 
 Here’s a brief overview of the key components in the Indium project:
 
-## Grammar 📚
+## Documentation 📚
 
-For more details, see [Grammar Documentation](./grammar/grammar.md).
+- [Parser Documentation](./documentation/parser-documentation.md)
+- [Tokenizer Documentation](./documentation/tokenizer-documentation.md)
 
 ## Contributing 🤝
 
